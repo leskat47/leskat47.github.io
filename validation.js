@@ -1,4 +1,4 @@
-// TODO: Using a small sample dictionary testDictionary. Find an API, or 
+// TODO: Using a small sample dictionary, testDictionary. Find an API, or 
 // host a local dictionary of words not currently used for usernames. 
 // If we do host our own, use a different data structure to speed searching.
 
@@ -7,23 +7,27 @@ var suggestions = [];
 
 
 function checkAPI(username) {
-  url = "http://chegg-tutors.appspot.com/coding-challenge/api/user/?username=" + $("#username").val();
+  url = "http://chegg-tutors.appspot.com/coding-challenge/api/user/?username=" + username;
 
   // Check API for user suggested name
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", url, false);
-  xhr.send();
-  console.log("test" + xhr.responseText)
-  return xhr.responseText
+  // var xhr = new XMLHttpRequest();
+  // xhr.open("GET", url, false);
+  // xhr.send();
+  // console.log(xhr.responseText);
+  // return xhr.responseText;
 
+  $.ajax(url).done(function(data) {
+    console.log(data);
+    return(data);
+  });
 }
 
 function makeNumberSuggestion (userSuggestion) {
   // count digits
-  var digits = 0
+  var digits = 0;
   for (var i = 0; i<userSuggestion.length; i++) {
     if (!isNaN(userSuggestion[i])) {
-      digits++
+      digits++;
     }
   }
   for (var i = 0; i<100; i++) {
@@ -34,12 +38,12 @@ function makeNumberSuggestion (userSuggestion) {
       var suggestion = userSuggestion + i;
       if (checkAPI(userSuggestion)) {
         suggestions.push(suggestion);
-        digits++
+        digits++;
       }
       suggestion = i + userSuggestion;
       if (checkAPI(userSuggestion)) {
         suggestions.push(suggestion);
-        digits++
+        digits++;
       }
     }
   }
@@ -49,82 +53,79 @@ function makeNumberSuggestion (userSuggestion) {
 function findSimilarWord(word) {
 
   while (suggestions.length < 3) {
-    // Find words that contain user suggested name i.e. elect --> elected
-    for (var i = 0; i<100; i++) {
+    console.log(suggestions);
+    // Find words in dictionary that contain user suggested name i.e. elect --> elected
+    for (var i = 0; i < 100; i++) {
       if (testDictionary[i].includes(word)) {
         checkAPI(testDictionary[i])
-        console.log("API")
         suggestions.push(testDictionary[i])
-        return
+        if (suggestions.length === 3) {
+          return
+        }
       }
+    }
 
-
-      // check for a subset of user suggested name i.e. election --> elect
+    // check for a subset of user suggested name i.e. election --> elect
+    for (var j = 0; j < word.length; j++) {
       var first = word.slice(0,i);
       var second = word.slice(i);
 
-      if (testDictionary.includes(first)) {
-        suggestions.push(first);
-      } else if (testDictionary.includes(second)) {
+      if (testDictionary.includes(first) && (typeof(checkAPI(first)) === undefined)) {
+          suggestions.push(first);
+          if (suggestions.length === 3) {
+          return
+          }
+      } else if (testDictionary.includes(second) && (typeof(checkAPI(second)) === undefined)) {
         suggestions.push(second);
+        if (suggestions.length === 3) {
+          return
+        }
       } else if (i > 1) {
         for (var j=0; j<i; j++) {
           var middle = word.slice(j, i)
-          if (testDictionary.includes(middle)) {
+          if (testDictionary.includes(middle) && (typeof(checkAPI(middle)) === undefined)) {
             suggestions.push(word.slice(j,i));
+            if (suggestions.length === 3) {
+              return
+            }
           }
         }   
+      } else {
+        while (suggestions < 3) {
+          suggestion = testDictionary[Math.floor(Math.random()*items.length)];
+          if ((typeof(checkAPI(suggestion)) === undefined)) {
+            suggestions.push(suggestion)
+          }
+        }
+        
       }
     }
   }
 }
 
 
-// $("#username").change(function () {
-//   username = $("#chg-balloon-input").val()
-//   nameInUse = checkAPI(username)
-    
-
-//   // If response shows already in API, find suggestions, else, confirm availability
-//   if (nameInUse) {
-//     // Add two digits to beginning or end of username
-
-//     makeNumberSuggestion(username);
-    
-
-//     // Find similar string (no numbers)
-//     findSimilarWord(username);
-//     console.log(suggestions)
-//     // Show suggestions
-
-//   } else {
-//       // TODO: show confirmation
-
-//   }
-
-// });
-
 $("#chg-balloon-submit").click(function(){
   username = $("#chg-balloon-input").val();
-  console.log(checkAPI(username));
-  nameInUse = checkAPI(username);
-    
+  var nameInUse = checkAPI(username);
 
   // If response shows already in API, find suggestions, else, confirm availability
-  if (nameInUse) {
+  if (typeof(nameInUse) != undefined) {
+    console.log("find suggestions");
+
     // Add two digits to beginning or end of username
-
     makeNumberSuggestion(username);
+    console.log(suggestions)
     
-
     // Find similar string (no numbers)
     findSimilarWord(username);
     console.log(suggestions);
+
     // Show suggestions
     $("#confirm").html('<p><img class="info" src="static/redx.png"> Sorry, ' + username + ' is not available.</p>');
     $("#suggest").html('How about one of these? <p> ' + suggestions[0] + '</p><p>' + suggestions[1] + '</p><p>' + suggestions[2] + '</p>');
 
   } else {
+    // show confirmation
       $("#confirm").html('<p><img class="info" src="static/check.png"> Congratulations! ' + username + ' is available!</p>')
 
   }
