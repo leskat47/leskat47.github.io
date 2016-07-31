@@ -1,11 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="http://chegg-tutors.appspot.com/public/styles.css" />
+    <style>
+        .info {
+            height:  15px;
+        }
+    </style>
+    <title>Chegg Tutors Engineering</title>
+    <link rel="icon" type="image/x-icon" href="http://chegg-tutors.appspot.com/coding-challenge/public/img/chegg-favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="chg-balloon-logo-container">
+        <img src="static/logo.png" />
+    </div>
+    <div id="chg-balloon-controls-container">
+        <p>Enter a username to get started!</p>
+        <input id="chg-balloon-input" maxlength="2048" placeholder="e.g. BalloonMaster99"
+            name="username" autocomplete="off" type="text" value="" />
+        <button id="chg-balloon-submit">Check availability</button>
 
-</head>
-<body>
-Username: <input type="text" id="username">
+        <div id="confirm">
+        </div>
+        <div id="suggest">
+        </div>
+    </div>
+
+<!--     <script type="text/javascript">
+
+        // The User search API accepts a comma-separated list of usernames, and returns
+        // user data for any matching records
+
+        $.ajax("/coding-challenge/api/user/?username=Hillary2016").done(function(data) {
+            // This logs Hillary2016's user data, since the username is registered
+            console.log(JSON.stringify(data));
+          });
+
+        $.ajax("/coding-challenge/api/user/?username=Trump4Pres,FeelTheBern1").done(function(data) {
+            // This logs Trump4Pres's user data, since the username is registered, but
+            // no user data for FeelTheBern1, since that username is not currently registered
+            console.log(JSON.stringify(data));
+          });
+
+
+        $("chg-balloon-submit").click(function() {
+
+            // This is where you come in!!
+
+        });
+
+    </script> -->
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="testDictionary.js"></script>

@@ -5,6 +5,7 @@
 var username;
 var suggestions = [];
 
+
 function checkAPI(username) {
   url = "http://chegg-tutors.appspot.com/coding-challenge/api/user/?username=" + $("#username").val();
 
@@ -12,23 +13,33 @@ function checkAPI(username) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url, false);
   xhr.send();
+  console.log("test" + xhr.responseText)
   return xhr.responseText
 
 }
 
 function makeNumberSuggestion (userSuggestion) {
+  // count digits
+  var digits = 0
+  for (var i = 0; i<userSuggestion.length; i++) {
+    if (!isNaN(userSuggestion[i])) {
+      digits++
+    }
+  }
   for (var i = 0; i<100; i++) {
-    while (suggestions.length < 2) {
+    while (suggestions.length < 2 && digits < 2) {
       if (i < 10) {
           i = "0" + i;
       }
       var suggestion = userSuggestion + i;
       if (checkAPI(userSuggestion)) {
-        suggestions.push(suggestion)
+        suggestions.push(suggestion);
+        digits++
       }
       suggestion = i + userSuggestion;
       if (checkAPI(userSuggestion)) {
-        suggestions.push(suggestion)
+        suggestions.push(suggestion);
+        digits++
       }
     }
   }
@@ -69,9 +80,34 @@ function findSimilarWord(word) {
 }
 
 
-$("#username").change(function () {
-  username = $("#username").val()
-  nameInUse = checkAPI(username)
+// $("#username").change(function () {
+//   username = $("#chg-balloon-input").val()
+//   nameInUse = checkAPI(username)
+    
+
+//   // If response shows already in API, find suggestions, else, confirm availability
+//   if (nameInUse) {
+//     // Add two digits to beginning or end of username
+
+//     makeNumberSuggestion(username);
+    
+
+//     // Find similar string (no numbers)
+//     findSimilarWord(username);
+//     console.log(suggestions)
+//     // Show suggestions
+
+//   } else {
+//       // TODO: show confirmation
+
+//   }
+
+// });
+
+$("#chg-balloon-submit").click(function(){
+  username = $("#chg-balloon-input").val();
+  console.log(checkAPI(username));
+  nameInUse = checkAPI(username);
     
 
   // If response shows already in API, find suggestions, else, confirm availability
@@ -83,15 +119,17 @@ $("#username").change(function () {
 
     // Find similar string (no numbers)
     findSimilarWord(username);
-    console.log(suggestions)
+    console.log(suggestions);
     // Show suggestions
+    $("#confirm").html('<p><img class="info" src="static/redx.png"> Sorry, ' + username + ' is not available.</p>');
+    $("#suggest").html('How about one of these? <p> ' + suggestions[0] + '</p><p>' + suggestions[1] + '</p><p>' + suggestions[2] + '</p>');
 
   } else {
-      // TODO: show confirmation
+      $("#confirm").html('<p><img class="info" src="static/check.png"> Congratulations! ' + username + ' is available!</p>')
 
   }
 
-});
+})
 
 
 
