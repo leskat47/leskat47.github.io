@@ -57,10 +57,10 @@ function findSimilarWord(word) {
     // Find words in dictionary that contain user suggested name i.e. elect --> elected
     for (var i = 0; i < 100; i++) {
       if (testDictionary[i].includes(word)) {
-        checkAPI(testDictionary[i])
+        checkAPI(testDictionary[i]);
         suggestions.push(testDictionary[i])
         if (suggestions.length === 3) {
-          return
+          return;
         }
       }
     }
@@ -73,12 +73,12 @@ function findSimilarWord(word) {
       if (testDictionary.includes(first) && (typeof(checkAPI(first)) === undefined)) {
           suggestions.push(first);
           if (suggestions.length === 3) {
-          return
+          return;
           }
       } else if (testDictionary.includes(second) && (typeof(checkAPI(second)) === undefined)) {
         suggestions.push(second);
         if (suggestions.length === 3) {
-          return
+          return;
         }
       } else if (i > 1) {
         for (var j=0; j<i; j++) {
@@ -86,7 +86,7 @@ function findSimilarWord(word) {
           if (testDictionary.includes(middle) && (typeof(checkAPI(middle)) === undefined)) {
             suggestions.push(word.slice(j,i));
             if (suggestions.length === 3) {
-              return
+              return;
             }
           }
         }   
@@ -94,7 +94,7 @@ function findSimilarWord(word) {
         while (suggestions < 3) {
           suggestion = testDictionary[Math.floor(Math.random()*items.length)];
           if ((typeof(checkAPI(suggestion)) === undefined)) {
-            suggestions.push(suggestion)
+            suggestions.push(suggestion);
           }
         }
         
@@ -114,7 +114,7 @@ $("#chg-balloon-submit").click(function(){
 
     // Add two digits to beginning or end of username
     makeNumberSuggestion(username);
-    console.log(suggestions)
+    console.log(suggestions);
     
     // Find similar string (no numbers)
     findSimilarWord(username);
@@ -126,7 +126,7 @@ $("#chg-balloon-submit").click(function(){
 
   } else {
     // show confirmation
-      $("#confirm").html('<p><img class="info" src="static/check.png"> Congratulations! ' + username + ' is available!</p>')
+      $("#confirm").html('<p><img class="info" src="static/check.png"> Congratulations! ' + username + ' is available!</p>');
 
   }
 
