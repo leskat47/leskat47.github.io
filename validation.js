@@ -9,13 +9,6 @@ var suggestions = [];
 function checkAPI(username) {
   url = "http://chegg-tutors.appspot.com/coding-challenge/api/user/?username=" + username;
 
-  // Check API for user suggested name
-  // var xhr = new XMLHttpRequest();
-  // xhr.open("GET", url, false);
-  // xhr.send();
-  // console.log(xhr.responseText);
-  // return xhr.responseText;
-
   $.ajax(url).done(function(data) {
     console.log(data);
     return(data);
@@ -30,8 +23,9 @@ function makeNumberSuggestion (userSuggestion) {
       digits++;
     }
   }
+  // if we have 2 or fewer digits, add digits
   for (var i = 0; i<100; i++) {
-    while (suggestions.length < 2 && digits < 2) {
+    if (suggestions.length < 2 && digits < 2) {
       if (i < 10) {
           i = "0" + i;
       }
@@ -53,7 +47,6 @@ function makeNumberSuggestion (userSuggestion) {
 function findSimilarWord(word) {
 
   while (suggestions.length < 3) {
-    console.log(suggestions);
     // Find words in dictionary that contain user suggested name i.e. elect --> elected
     for (var i = 0; i < 100; i++) {
       if (testDictionary[i].includes(word)) {
