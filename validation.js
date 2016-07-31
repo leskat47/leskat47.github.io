@@ -29,12 +29,12 @@ function makeNumberSuggestion (userSuggestion) {
           i = "0" + i;
       }
       var suggestion = userSuggestion + i;
-      if (checkAPI(userSuggestion)) {
+      if (checkAPI(suggestion)) {
         suggestions.push(suggestion);
         digits++;
       }
       suggestion = i + userSuggestion;
-      if (checkAPI(userSuggestion)) {
+      if (checkAPI(suggestion)) {
         suggestions.push(suggestion);
         digits++;
       }
