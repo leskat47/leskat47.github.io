@@ -10,7 +10,6 @@ function checkAPI(username) {
   url = "http://chegg-tutors.appspot.com/coding-challenge/api/user/?username=" + username;
 
   $.ajax(url).done(function(data) {
-    console.log(data);
     return(data);
   });
 }
@@ -46,7 +45,7 @@ function makeNumberSuggestion (userSuggestion) {
 
 function findSimilarWord(word) {
 
-  while (suggestions.length < 3) {
+  if (suggestions.length < 3) {
     // Find words in dictionary that contain user suggested name i.e. elect --> elected
     for (var i = 0; i < 100; i++) {
       if (testDictionary[i].includes(word)) {
@@ -107,7 +106,7 @@ $("#chg-balloon-submit").click(function(){
 
     // Add two digits to beginning or end of username
     makeNumberSuggestion(username);
-    console.log(suggestions);
+    console.log("number " + suggestions);
     
     // Find similar string (no numbers)
     findSimilarWord(username);
